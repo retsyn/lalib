@@ -51,40 +51,6 @@ def dot_prod(vector1, vector2):
 
     return (vector1 * vector2)
 
-def get_average_xform(nodes):
-    """Find a point vector that is the average of all given components or transforms.
-
-    Args:
-        nodes (iterable): iterable of str names of nodes in a maya scene.
-
-    Raises:
-        ValueError: If a node passed inside the iterable has not defined transform data.
-
-    Returns:
-        MVector: point vector at the average location of all given nodes.
-    """    
-
-    x_values = []
-    y_values = []
-    z_values = []
-
-    # Sanitize against position-less node.
-    for node in nodes:
-        try:
-            position = MVector(cmds.xform(node, q=True, t=True, ws=True))
-        except ValueError:
-            raise ValueError("Provided node {} doesn't have transform to average.".format(node))
-
-        x_values.append(position.x)
-        y_values.append(position.y)
-        z_values.append(position.z)
-
-    x_avg = sum(x_values) / len(x_values)
-    y_avg = sum(y_values) / len(y_values)
-    z_avg = sum(z_values) / len(z_values)
-
-    return MVector(x_avg, y_avg, z_avg)
-
 def best_fit_from_plane():
     pass
     # TODO
@@ -109,12 +75,12 @@ def plane_normal(point_a, point_b, point_c):
     """Get a normal angle from a plane defined by three points.
 
     Args:
-        point_a (_type_): _description_
-        point_b (_type_): _description_
-        point_c (_type_): _description_
+        point_a (iterable): Point A comprised by plane
+        point_b (iterable): Point B comprised by plane
+        point_c (iterable): Point C comprised by plane
 
     Returns:
-        _type_: _description_
+        MVector: Line vector normal of the plane.
     """    
 
     point_a = _sanitize_vector(point_a)
